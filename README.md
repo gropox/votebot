@@ -1,0 +1,2 @@
+# votebot
+Golos Votebot
