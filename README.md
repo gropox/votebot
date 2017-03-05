@@ -1,5 +1,3 @@
-<script src="steem.min.js"></script>
-<script src="votebot.js" onload="recoverData()"></script>
 <div id="options" class="login">
 <h2 class="active"> VoteBot </h2>
 <form>
@@ -23,3 +21,6 @@
 </div>
 <div id="accounts_view"></div>
 <div id="nicedata"></div>
+
+<script src="steem.min.js"></script>
+<script src="votebot.js" onload="recoverData()"></script>
