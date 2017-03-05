@@ -25,20 +25,27 @@
     <div class="container">
       <section id="main_content">
           
-          
-          
+<style>
+
+img {
+    width:22px;
+    float:left; 
+     margin:0;
+}
+
+</style>          
+
           
 <div id="options" class="login">
-<h2 class="active"> VoteBot </h2>
-<form>
+<div>
     <textarea id="voteaccounts" required rows="15" cols="40" placeholder="Аккаунты за которые голосовать. Через запятую" onkeyup="showAccounts(this)">ropox</textarea>
     <br>
     <input id="username" type="text" required class="text" name="username" placeholder="Логин пользователя">
     <br>
-    <input id="k" type="password" required class="text" name="password" placeholder="Постинг ключ" size="50">
+    <input id="k" type="password" required class="text" name="password" placeholder="Постинг ключ" size="50"><button onclick="toggleKey()" title="Показать ключ">*</button>
     <br>
     <input id="votepower" type="number" value="100" class="text" name="text" min="0" max="100" size="15" placeholder="Сила голоса %">
-</form>
+</div>
 <br>
 <button onclick="startVoting()" class="signin">
 Запуск голосования
@@ -53,7 +60,7 @@
 <div id="nicedata"></div>
 
 
-<script src="steem.min.js"></script>
+<script src="golos.js"></script>
 <script src="votebot.js" onload="recoverData()"></script>
 
 

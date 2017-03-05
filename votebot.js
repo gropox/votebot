@@ -2,6 +2,15 @@ var golosbase = "https://golos.io";
 var golos_ws = "wss://ws.golos.io";
 var voteQueue = [];
 
+function toggleKey() {
+    let key = document.getElementById("k");
+    if(key.type == "text") {
+        key.type = "password";
+    } else {
+        key.type = "text";
+    }
+}
+
 function recoverData() {
     let raw_users = document.getElementById("voteaccounts");
     let key = document.getElementById("k");
@@ -84,8 +93,9 @@ function startVoting() {
                         let he = result[ai][1].op;
                         let time = result[ai][1].timestamp;
                         let utime = Date.parse(time) / t;
+                        let tx = result[ai][1].trx_id;
                         //console.log(utime);
-                        if(typeof he !== "undefined" && utime > starttime) {
+                        if(typeof he !== "undefined" && utime > (starttime-15*60*1000)) {
                             let op = he[0];
                             let entry = he[1];
                             //console.log(op);
@@ -95,8 +105,12 @@ function startVoting() {
                                 accounts[u].queue.push({
                                     author : u,
                                     permlink : entry.permlink,
-                                    title : entry.title
+                                    title : entry.title,
+                                    tx : tx
                                 });
+                                votehtml = '<div><a href="https://golos.io/@' + u + '/' + entry.permlink + '"><strong>' + u + ": "  + entry.title + '</a> <img id="' + tx + '" src="ic_check_box_outline_blank_white_24dp.png"/></div>';
+                                document.getElementById('nicedata').insertAdjacentHTML('afterbegin', votehtml);
+
                                 checkDelay = checkDelay + votingDelay;
                             }
                         }
@@ -127,15 +141,22 @@ function startVoting() {
                                     }
                                 }
                                 if(!alreadyVoted) {
-                                    votehtml = '<div id="item" class="myJson"><a href="https://golos.io/@' + vote.author + '/' + vote.permlink + '"><strong>' + vote.author + ": "  + vote.title + '</a></div>';
-                                    document.getElementById('nicedata').insertAdjacentHTML('afterbegin', votehtml);
                                     steem.broadcast.vote(k, username, vote.author, vote.permlink, votepower * 100, function(err, result) {
                                         console.log(err,result);
+                                        let itemVote = document.getElementById(vote.tx);
+                                        if(typeof err == "undefined") {
+                                            itemVote.src = "ic_check_box_white_24dp.png";
+                                        } else {
+                                            itemVote.src = "ic_error_white_24dp.png";
+                                        }                                                                                    
                                     });
                                     if(checkDelay > 10000) {
                                         checkDelay = checkDelay - votingDelay;
                                     }
-                                }
+                                } else {
+                                    let itemVote = document.getElementById(vote.tx);
+                                    itemVote.src = "ic_check_box_white_24dp.png";
+                                }                                    
                             });
                         }
                     } else {
