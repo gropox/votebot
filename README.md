@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="utf-8"/>
@@ -99,16 +100,18 @@
 
         var checkDelay = 10000;
         var votingDelay = 3000;
+        
+        steem.api.getDynamicGlobalProperties(function(err, result) {
+            starttime = Date.parse(result.time) / t;
+        });
+        
         workerTimer = setInterval(function() {
-
-            //steem.api.getDynamicGlobalProperties(function(err, result) {
-            //    starttime = Date.parse(result.time) / t;
-            //});
+            console.log("starttime = " + starttime);
             
             for(let i = 0; i < users.length; i++) {
                 let u = users[i];
                 console.log("get account history for " +u);
-                steem.api.getAccountHistory(u, -1, 150, function(err, result) {
+                steem.api.getAccountHistory(u, -1, 20, function(err, result) {
                     //получили 10 последних записей из истории 
                     //console.log(result);
                     for(var ai = 0; ai < result.length; ai++) {
@@ -116,7 +119,10 @@
                         //console.log(heId);
                         if(accounts[u].lastId < heId) {
                             let he = result[ai][1].op;
-                            if(typeof he !== "undefined") {
+                            let time = result[ai][1].timestamp;
+                            let utime = Date.parse(time) / t;
+                            //console.log(utime);
+                            if(typeof he !== "undefined" && utime > starttime) {
                                 let op = he[0];
                                 let entry = he[1];
                                 //console.log(op);
