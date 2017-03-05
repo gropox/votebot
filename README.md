@@ -8,7 +8,6 @@ img {
 
 </style>          
 
-          
 <div id="options" class="login">
 <div>
     <textarea id="voteaccounts" required rows="15" cols="40" placeholder="Аккаунты за которые голосовать. Через запятую" onkeyup="showAccounts(this)">ropox</textarea>
@@ -31,7 +30,6 @@ img {
 </div>
 <div id="accounts_view"></div>
 <div id="nicedata"></div>
-
 
 <script src="golos.js"></script>
 <script src="votebot.js" onload="recoverData()"></script>
