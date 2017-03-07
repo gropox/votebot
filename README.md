@@ -24,7 +24,8 @@ label { display: block; width: 400px; }
     <input id="votepower" type="number" class="text" value="100" name="text" min="0" max="100" size="15" placeholder="Сила голоса %"></label>
     <br>
     <label>Голосовать за пост по прошествии N минут<br>
-    <input id="delay" type="number" class="text" value="5" name="text" min="0" size="15" placeholder="Задержка мин."></label>    
+    <input id="delay" type="number" class="text" value="5" name="text" min="0" size="15" placeholder="Задержка мин."></label>
+    <input id="debug" type="hidden" value="off"/>
 </div>
 <br>
 <button onclick="startVoting()" class="signin">
