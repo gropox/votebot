@@ -199,6 +199,7 @@ function startVoting() {
                                         console.log(err,result);
                                         let itemVote = document.getElementById(vote.tx);
                                         if(typeof err == "undefined") {
+                                            alreadyVoted = true;
                                         } else {
                                             itemVote.src = "ic_error_white_24dp.png";
                                         }                                                                                    
@@ -206,7 +207,6 @@ function startVoting() {
                                     if(checkDelay > 10000) {
                                         checkDelay = checkDelay - votingDelay;
                                     }
-                                    alreadyVoted = true;
                                 }
                                 if(alreadyVoted) {
                                     let itemVote = document.getElementById(vote.tx);
