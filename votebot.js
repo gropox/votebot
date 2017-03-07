@@ -70,10 +70,15 @@ function startVoting() {
         username = document.getElementById("username").value,
         votepower = document.getElementById("votepower").value,
         delay = document.getElementById("delay").value,
+        debug = document.getElementById("debug").value,
         time, starttime, acttime, t = 1000,
         period = 10 * 60,
         utime, start, history,
         raw_users = document.getElementById("voteaccounts").value;
+    
+    function isDebug() {
+        return debug == "debug";
+    }
 
     localStorage.setItem("raw_users", raw_users);
     localStorage.setItem("key", k);
@@ -124,6 +129,9 @@ function startVoting() {
                 for(var ai = 0; ai < result.length; ai++) {
                     let heId = result[ai][0];
                     //проверить id, больше ли, чем уже прочитанный ранее?
+                    if(isDebug()) {
+                        console.log("сохраненный id = " + accounts[u].lastId + "  " + heId );
+                    }
                     if(accounts[u].lastId < heId) {
                         let he = result[ai][1].op;
                         let time = result[ai][1].timestamp;
@@ -131,17 +139,19 @@ function startVoting() {
                         let tx = result[ai][1].trx_id;
                         //console.log(utime);
                         if(typeof he !== "undefined") {//Отсеять ошибки
+                            let op = he[0];
+                            let entry = he[1];
+                            let nice_name = u + " / " + entry.permlink;
                             let earliesttime = acttime - (delay*60); //проверить, не созрел ли пост для голосования
-                            //console.log("время запуска = " + starttime);
-                            //console.log("время опроса = " + acttime);
-                            //console.log("время время созревания = " + earliesttime);
-                            //console.log("время создания поста = " + utime);
-                            if( utime > starttime && utime < earliesttime) {
-                                let op = he[0];
-                                let entry = he[1];
-                                //console.log(op);
-                                //интересует запись с типом comment, корневая запись в блоге и не правка текста
-                                if(op == "comment" && entry.author == u && entry.parent_author == "" && !entry.body.match("^@@ .* @@")) {
+                            if(op == "comment" && entry.author == u && entry.parent_author == "" && !entry.body.match("^@@ .* @@")) {
+                                if(isDebug()) {
+                                    console.log("найден пост " + nice_name);
+                                    console.log("время запуска = " + starttime);
+                                    console.log("время опроса = " + acttime);
+                                    console.log("время время созревания = " + earliesttime);
+                                    console.log("время создания поста = " + utime);
+                                }
+                                if(utime < earliesttime) {
                                     //console.log(entry);
                                     console.log(heId + ":" + accounts[u].lastId  + " добавить в очередь : " + u + " / " + entry.permlink);
                                     //добавляем в очередь для голосования
@@ -149,7 +159,8 @@ function startVoting() {
                                         author : u,
                                         permlink : entry.permlink,
                                         title : entry.title,
-                                        tx : tx
+                                        tx : tx,
+                                        id : heId
                                     });
                                     votehtml = '<div><a href="https://golos.io/@' + u + '/' + entry.permlink + '"><strong>' + u + ": "  + entry.title + '</strong></a> <img id="' + tx + '" src="ic_check_box_outline_blank_white_24dp.png"/></div>';
                                     document.getElementById('nicedata').insertAdjacentHTML('afterbegin', votehtml);
@@ -158,7 +169,6 @@ function startVoting() {
                                 }
                             }
                         }
-                        accounts[u].lastId = heId;
                     }
                 }
                 //недавние голосования
@@ -189,7 +199,6 @@ function startVoting() {
                                         console.log(err,result);
                                         let itemVote = document.getElementById(vote.tx);
                                         if(typeof err == "undefined") {
-                                            itemVote.src = "ic_check_box_white_24dp.png";
                                         } else {
                                             itemVote.src = "ic_error_white_24dp.png";
                                         }                                                                                    
@@ -197,9 +206,13 @@ function startVoting() {
                                     if(checkDelay > 10000) {
                                         checkDelay = checkDelay - votingDelay;
                                     }
-                                } else {
+                                    alreadyVoted = true;
+                                }
+                                if(alreadyVoted) {
                                     let itemVote = document.getElementById(vote.tx);
                                     itemVote.src = "ic_check_box_white_24dp.png";
+                                    accounts[u].lastId = vote.id;
+                                    
                                 }                                    
                             });
                         }
