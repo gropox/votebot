@@ -1,5 +1,5 @@
 var golosbase = "https://golos.io";
-var golos_ws = "wss://ws.golos.io";
+
 var voteQueue = [];
 var progress = 0;
 let progress_bar = document.getElementById("progress");
