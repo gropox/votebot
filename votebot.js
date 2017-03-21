@@ -64,7 +64,7 @@ function startVoting() {
     console.log("startBot");
     showAccounts(document.getElementById("voteaccounts"));
     
-    steem.api.setWebSocket(golos_ws);
+    //steem.api.setWebSocket(golos_ws);
     var users = parseAccounts(document.getElementById("voteaccounts").value),
         k = document.getElementById("k").value,
         username = document.getElementById("username").value,
