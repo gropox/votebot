@@ -1,4 +1,4 @@
-var golosbase = "https://golos.io";
+
 
 var voteQueue = [];
 var progress = 0;
