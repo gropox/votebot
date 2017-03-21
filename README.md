@@ -1,3 +1,5 @@
+<h3>Steemit Version</h3>
+
 <style>
 
 img {
@@ -41,5 +43,5 @@ label { display: block; width: 400px; }
 <div id="nicedata"></div>
 
 
-<script src="golos.js"></script>
+<script src="steem.min.js"></script>
 <script src="votebot.js" onload="recoverData()"></script>
